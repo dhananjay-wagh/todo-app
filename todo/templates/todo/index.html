@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    {% if all_tasks %}
+        <h1>Tasks</h1>
+        <ul type="circle">
+            {% for task in all_tasks %}
+                {% if task.completed %}
+                    <li style="color: green;">
+                        {{task}} 
+                        <form action="{% url 'todo:complete' task.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="complete">
+                        </form>
+                        <form action="{% url 'todo:delete' task.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="delete">
+                        </form>
+                    </li>
+                {% else %}
+                    <li style="color: red;">
+                        {{task}}
+                        <form action="{% url 'todo:complete' task.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="complete">
+                        </form>
+                        <form action="{% url 'todo:delete' task.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="delete">
+                        </form>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No Tasks</p>
+    {% endif %}
+
+    <form action="{% url 'todo:add' %}" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Add Tasks</legend>
+            <label for="tasks">Title</label>
+            <input type="text" name="title" id="tasks">
+        </fieldset>
+        <input type="submit" value="Add">
+    </form>
+        
+</body>
+</html>
